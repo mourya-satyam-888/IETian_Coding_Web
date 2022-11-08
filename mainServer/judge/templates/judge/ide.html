@@ -36,7 +36,7 @@ body{
 }
 
 .btnn span {
-  position: relative;
+  position: relative; 
   z-index: 1;
 }
 
@@ -58,8 +58,10 @@ body{
   -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
   transform: translateX(-9%) translateY(-25%) rotate(45deg);
 }
+
+
 </style>
-</head>
+</head>	
 <body>
 
 
@@ -88,8 +90,51 @@ public class Main
 	}
 }</pre>
 <pre data-preload="index/samples/sample.python.txt" style="display:none">#Enter your code here</pre>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner" style="background-color:#343a40!important;">
+			<div class="container">
+				<div class="logo">
+				<img style="margin-top:-8px;" src="{% static 'home/logo-icon.svg' %}" alt="icon"></span>
+                <a href="{% url 'problem' %}"><strong>IETian Coding</strong>-Web</a>
+					
+				</div>
+				<!-- collapse button for smaller screens -->
+				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
 
-
+				<!-- navbar title -->
+				<div class="nav-collapse collapse">
+					<ul class="nav">	
+						 {% if user.is_authenticated %}
+						<li><a href="{% url 'problem' %}" class="nav-item">Problems</a></li>
+						<li><a href="{% url 'blog-home' %}" class="nav-item">Discuss</a></li>
+						{% comment %} <li> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+						&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+						&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+						&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+						</li> {% endcomment %}
+                        <li><a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a></li>
+                        <li><a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a></li>
+                       {% else %}
+					   <li><a href="{% url 'judge' %}" class="nav-item">Judge</a></li>
+					   <li><a href="{% url 'blog-home' %}" class="nav-item">Discuss</a></li>
+					   {% comment %} <li> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+					   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+					   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+					   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+					   </li> {% endcomment %}
+                       <li><a class="nav-item" href="{% url 'login' %}?next={{request.path}}">Login</a></li>
+                       <li><a class="nav-item" href="{% url 'register' %}">Register</a></li>
+                       {% endif %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
+		
 <section class="try">
 	<div class="container">
 		<div class="editor row">
@@ -131,9 +176,9 @@ public class Main
 			</div>
 	</div>
 	<button type="submit" class="btnn"><span>Run</span></button>
-
+	
 	</form>
-
+	
 	<center><img id="run" src="{% static 'judge/load.svg' %}" /></center>
 
 	</div>
@@ -141,18 +186,18 @@ public class Main
 </section>
 
 
+      
 
-
-
+	
 		<footer class="container">
 		<hr>
 		<p class="text-center">
 			<a href="/" title="IETian Coding Web">
-
+			    
 				<img src="{% static 'judge/logo.png' %}" style="max-height:70px;margin-bottom:12px;">
 			</a>
 			<br/>
-			<small>&copy; 2021</small>
+			<small>&copy; 2022</small>
 		</p>
      	</footer>
 
@@ -173,6 +218,231 @@ public class Main
 	    <script src="{% static 'judge/vs/editor/editor.main.nls.js' %}"></script>
 	    <script src="{% static 'judge/vs/editor/editor.main.js' %}"></script>
 
-	    <script src="{% static 'judge/ide.js'%}"></script>
-</body>
+	    <script>
+	       
 
+
+	        "use strict";
+
+	        var editor = null;
+	           
+
+	        $(document).ready(function () {
+				$('#custom_input').css('display','none');
+				$('#run').css('display','none');
+	            require(['vs/editor/editor.main'], function () {
+	                var MODES = (function () {
+	                    var modesIds = monaco.languages.getLanguages().map(function (lang) {
+	                        return lang.id;
+	                    });
+	                    modesIds.sort();
+
+	                    return modesIds.map(function (modeId) {
+	                        return {
+	                            modeId: modeId,
+	                            sampleURL: 'index/samples/sample.' + modeId + '.txt'
+	                        };
+	                    });
+	                })();
+
+
+
+	                var startModeIndex = 5;
+	                for (var i = 0; i < MODES.length; i++) {
+	                    var o = document.createElement('option');
+	                    o.textContent = MODES[i].modeId;
+	                    if (i == 5) {
+	                        o.textContent = 'C';
+	                        $(".language-picker").append(o);
+	                    }
+	                    if (i == 9) {
+	                        o.textContent = 'C++';
+	                        $(".language-picker").append(o);
+	                    }
+                        if (i == 20) {
+	                        o.textContent = 'JAVA';
+	                        $(".language-picker").append(o);
+	                    }
+	                    if (i == 41) {
+	                        o.textContent = 'PYTHON3';
+	                        $(".language-picker").append(o);
+	                    }
+	                   
+
+
+
+
+	                }
+
+
+	             
+
+                    $(document).on('submit','#code_form',function(e){
+                    e.preventDefault();
+					if(window.editor == null)
+					return;
+					$('#run').css('display','block');
+					$('#result').css('display','none')
+					$('.btnn').prop('disabled',true);
+                    $.ajax({
+                            type:'post',
+                            url:'runcode/',
+                            data:{
+                                language:$(".language-picker").val(),
+                                code:window.editor.getValue(),
+                                custom_input:$('#custom_input').val(),
+                                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                            },
+                            success:function(json)
+                            {
+                                $('#run').css('display','none');
+								$('.btnn').prop('disabled',false);
+								$('#result').css('display','block');
+								$('#result').html(json.response);
+                                console.log("Success");
+                                
+                            }
+
+                        });
+                }); 
+
+                   
+                 
+
+
+	                $(".language-picker")[0].selectedIndex = 0;
+
+
+	                $(".language-picker").change(function () {
+                         
+                        
+	                    if ($(".language-picker").val() == 'C')
+							{loadSample(MODES[5]);
+							$('#result').css('display','none')
+							$('#custom_input').css('display','block');
+							$('#custom_input').val('')='';
+							
+							}
+						
+	                    else if ($(".language-picker").val() == 'C++')
+						    {
+	                        loadSample(MODES[9]);
+							
+							$('#custom_input').css('display','block');
+							$('#custom_input').val('');
+							$('#result').css('display','none')
+							}
+							
+	                    else if ($(".language-picker").val() == 'JAVA')
+						   {
+	                        loadSample(MODES[20]);
+							
+							$('#custom_input').css('display','block');
+							$('#custom_input').val('');
+							$('#result').css('display','none')
+							}
+	                    else if ($(".language-picker").val() == 'PYTHON3')
+	                        {loadSample(MODES[41]);
+							
+							$('#custom_input').css('display','block');
+							$('#custom_input').val('');
+							$('#result').css('display','none')
+							}
+	                    else if ($(".language-picker").val() == 'select')
+                            { loadSample(MODES[0]);
+							
+                            $('#custom_input').css('display','none');
+							$('#custom_input').val('');
+							$('#result').css('display','none')
+							}
+                        
+
+
+
+	                });
+
+	                $(".theme-picker").change(function () {
+	                    changeTheme(this.selectedIndex);
+	                });
+
+	               
+
+	               
+	            });
+
+	            window.onresize = function () {
+	                if (editor) {
+	                    editor.layout();
+	                }
+	               
+	            };
+	        });
+
+	        var preloaded = {};
+	        (function () {
+	            var elements = Array.prototype.slice.call(document.querySelectorAll('pre[data-preload]'), 0);
+
+	            elements.forEach(function (el) {
+	                var path = el.getAttribute('data-preload');
+	                preloaded[path] = el.innerText || el.textContent;
+	                el.parentNode.removeChild(el);
+	            });
+	        })();
+
+	        function xhr(url, cb) {
+	            if (preloaded[url]) {
+	                return cb(null, preloaded[url]);
+	            }
+	            $.ajax({
+	                type: 'GET',
+	                url: url,
+	                dataType: 'text',
+	                error: function () {
+	                    cb(this, null);
+	                }
+	            }).done(function (data) {
+	                cb(null, data);
+	            });
+	        }
+
+function loadSample(mode) {
+	$('.loading.editor').show();
+	xhr(mode.sampleURL, function(err, data) {
+		if (err) {
+			if (editor) {
+				if (editor.getModel()) {
+					editor.getModel().dispose();
+				}
+				editor.dispose();
+				editor = null;
+			}
+			$('.loading.editor').fadeOut({ duration: 200 });
+			$('#editor').empty();
+			$('#editor').append('<p class="alert alert-error">Select a language to code</p>');
+			return;
+		}
+
+		if (!editor) {
+			$('#editor').empty();
+			editor = monaco.editor.create(document.getElementById('editor'), {
+				model: null,
+			});
+		}
+
+		var oldModel = editor.getModel();
+		var newModel = monaco.editor.createModel(data, mode.modeId);
+		editor.setModel(newModel);
+		if (oldModel) {
+			oldModel.dispose();
+		}
+		$('.loading.editor').fadeOut({ duration: 300 });
+	})
+}
+
+	        
+	        function changeTheme(theme) {
+	            var newTheme = (theme === 1 ? 'vs-dark' : (theme === 0 ? 'vs' : 'hc-black'));
+	            monaco.editor.setTheme(newTheme);
+	        }
+	    </script>
+</body>
