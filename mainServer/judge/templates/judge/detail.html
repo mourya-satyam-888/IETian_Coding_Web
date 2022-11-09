@@ -38,12 +38,20 @@
       <h4>Explaination</h4>
   <p class=" card-text article-content">{{problem.explaination}}</p><hr>
     {% if request.user.is_authenticated %}
+          {%if faculty %}
+          <center>
+   <br>
+   <a href="solutions/"><button class="btn btn-secondary">Details</button></a>
+   <div style="margin-bottom:20px">
+      </div>
+   </center>
+          {% else %}
    <center>
    <br>
    <a href="submit/"><button class="btn btn-secondary">Submit</button></a>
    <div style="margin-bottom:20px">
       </div>
-   </center>
+   </center>{%endif%}
           {%else%}
           <p>Please Login to Submit</p>
           {%endif%}
@@ -57,22 +65,25 @@
       <div  class="col-6">
       <p>Author:</p>
       <p>Date added:</p>
+          <br>
+          <p>Due Date:</p>
+          <br>
       <p>Time limit:</p>
       <p>Difficulty:</p>
-      <p>Submissions:</p>
-      <p>Accuracy:</p>
       <p>Memory:</p>
       <p>Languages:</p>
       </div>
       <div class="col-6">
       <p>{{problem.auth}}</p>
       <p>{{problem.date_added|date:"F d, Y"}}</p>
+          <p>{{problem.due_date|date:"F d, Y"}}</p>
       <p>{{problem.time_limit}}sec.</p>
       <p>{{problem.difficulty}}</p>
-      <p>{{ problem.problem_feature.total_submission }}</p>
-      <p class="card-text mb-1"><div class="progress">
-      <div class="progress-bar" role="progressbar" style="color:black; width: {{ problem.problem_feature.accuracy }}%;" aria-valuenow="{{ problem.problem_feature.accuracy }}" aria-valuemin="0" aria-valuemax="100">{{ problem.problem_feature.accuracy }}%</div>
-      </div><br>
+
+<!--      <p>{{ problem.problem_feature.total_submission }}</p>-->
+<!--      <p class="card-text mb-1"><div class="progress">-->
+<!--      <div class="progress-bar" role="progressbar" style="color:black; width: {{ problem.problem_feature.accuracy }}%;" aria-valuenow="{{ problem.problem_feature.accuracy }}" aria-valuemin="0" aria-valuemax="100">{{ problem.problem_feature.accuracy }}%</div>-->
+<!--      </div><br>-->
       <p>256 MB</p>
       <p>C ,C++ ,JAVA<br>PYTHON3</p>
       </div>

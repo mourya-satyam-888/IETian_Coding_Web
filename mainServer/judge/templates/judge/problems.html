@@ -194,67 +194,67 @@
         </div>
 
     
-			<div class="content-section shadow-lg p-3  bg-white rounded">
-      <h6>Filter by difficulty</h6><hr>
-		<canvas id="pieChart"></canvas>
-	
-	<script>
-var get_data=$.ajax({
-  method:"GET",
-  url:"{% url 'get-data' %}",
-  async: !1,
-  success:function(json){
-  }
-});
+<!--			<div class="content-section shadow-lg p-3  bg-white rounded">-->
+<!--      <h6>Filter by difficulty</h6><hr>-->
+<!--		<canvas id="pieChart"></canvas>-->
+<!--	-->
+<!--	<script>-->
+<!--var get_data=$.ajax({-->
+<!--  method:"GET",-->
+<!--  url:"{% url 'get-data' %}",-->
+<!--  async: !1,-->
+<!--  success:function(json){-->
+<!--  }-->
+<!--});-->
 
-var mydata=get_data.responseJSON.arr;
-var canvasP = document.getElementById("pieChart");
-var ctxP = canvasP.getContext('2d');
-var myPieChart = new Chart(ctxP, {
-   type: 'pie',
-   data: {
-      labels: ["Expert  ", "Hard", "Medium", "Easy"],
-      datasets: [{
-         data: mydata,
-         backgroundColor: ["#FF0000", "#FFC107", "#46BFBD", "#5BC85B"],
-         hoverBackgroundColor: ["#FF5A5E", "#FFC870", "#5AD3D1", "#90EE90"]
-      }]
-   },
-   options: {
-      legend: {
-         responsive: true,
-         display: true,
-         position: "bottom"
-      },
-   }
-});
+<!--var mydata=get_data.responseJSON.arr;-->
+<!--var canvasP = document.getElementById("pieChart");-->
+<!--var ctxP = canvasP.getContext('2d');-->
+<!--var myPieChart = new Chart(ctxP, {-->
+<!--   type: 'pie',-->
+<!--   data: {-->
+<!--      labels: ["Expert  ", "Hard", "Medium", "Easy"],-->
+<!--      datasets: [{-->
+<!--         data: mydata,-->
+<!--         backgroundColor: ["#FF0000", "#FFC107", "#46BFBD", "#5BC85B"],-->
+<!--         hoverBackgroundColor: ["#FF5A5E", "#FFC870", "#5AD3D1", "#90EE90"]-->
+<!--      }]-->
+<!--   },-->
+<!--   options: {-->
+<!--      legend: {-->
+<!--         responsive: true,-->
+<!--         display: true,-->
+<!--         position: "bottom"-->
+<!--      },-->
+<!--   }-->
+<!--});-->
 
-canvasP.onclick = function(e) {
-   var slice = myPieChart.getElementAtEvent(e);
-   if (!slice.length) return; // return if not clicked on slice
-   var label = slice[0]._model.label;
-   switch (label) {
-      // add case for each label/slice
-      case 'Expert  ':
-         window.location.href = "{% url 'filter-difficulty' "Expert" %}";
-         break;
-      case 'Hard':
-         window.location.href = "{% url 'filter-difficulty' "Hard" %}";
-         break;
-      case 'Medium':
-         window.location.href = "{% url 'filter-difficulty' "Medium" %}";
-         break;
-      case 'Easy':
-         window.location.href = "{% url 'filter-difficulty' "Easy" %}";
-         break;
-  
-   }
-}
-		
+<!--canvasP.onclick = function(e) {-->
+<!--   var slice = myPieChart.getElementAtEvent(e);-->
+<!--   if (!slice.length) return; // return if not clicked on slice-->
+<!--   var label = slice[0]._model.label;-->
+<!--   switch (label) {-->
+<!--      // add case for each label/slice-->
+<!--      case 'Expert  ':-->
+<!--         window.location.href = "{% url 'filter-difficulty' "Expert" %}";-->
+<!--         break;-->
+<!--      case 'Hard':-->
+<!--         window.location.href = "{% url 'filter-difficulty' "Hard" %}";-->
+<!--         break;-->
+<!--      case 'Medium':-->
+<!--         window.location.href = "{% url 'filter-difficulty' "Medium" %}";-->
+<!--         break;-->
+<!--      case 'Easy':-->
+<!--         window.location.href = "{% url 'filter-difficulty' "Easy" %}";-->
+<!--         break;-->
+<!--  -->
+<!--   }-->
+<!--}-->
+<!--		-->
 
-	</script>
-       
-      </div>
+<!--	</script>-->
+<!--       -->
+<!--      </div>-->
 
           	<div class="content-section shadow-lg p-3  bg-white rounded">
       <h6>Order by</h6><hr>

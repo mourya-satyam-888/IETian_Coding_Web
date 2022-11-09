@@ -1,0 +1,120 @@
+{% extends "judge/base.html" %}
+{% block content %}
+
+
+<main role="main" class="container">
+    <div class="row">
+      <div class="col-md-9">
+  {% if messages %}
+        {% for message in messages %}
+           <div class="alert alert-secondary">
+             {{message}}
+           </div>
+        {% endfor %}
+   {% endif %}
+  <div class="row">
+  <div class="col-1" style="font-size:10px"><center>#<center></div>
+  <div class="col-3" style="font-size:10px"><center>NAME</center></div>
+  <div class="col-3" style="font-size:10px"><center>Language</center></div>
+  </div>
+  <hr>
+
+   {% for solution in solutions %}
+ 
+
+ <div class="shadow-lg p-3 mb-2 bg-white rounded">
+  <div class="row">
+
+  <div class="col-1" id="prob{{forloop.counter}}"></div>
+<script>
+ 
+     $('#prob{{forloop.counter}}').html($.urlParam('page')*10+{{ forloop.counter }}-10);
+  </script>
+  {% if solution.verdict == 'ac' %}
+  <div class="col-3"><a href="{% url 'sol_detail' solution.problem.id solution.id %}"><center>{{solution.usr}} <span class="badge badge-success">{{solution.language}}</span></center></a></div>
+      {%endif%}
+
+  <div class="col-3">
+  
+
+
+</div>
+  </div>
+  </div>
+   {% endfor %}
+    {% if is_paginated %}
+       {% if page_obj.has_previous %}
+       <a class="btn btn-outline-dark mb-4" href="?page=1" >First</a>
+       <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}" >&laquo;</a>
+       {% endif %}
+
+       {% for num in page_obj.paginator.page_range %}
+           {% if page_obj.number == num %}
+           <a class="disabled btn btn-dark mb-4" href="?page={{ num }}" >{{num}}</a>
+           {% elif num > page_obj.number|add:'-3' and  num < page_obj.number|add:'3' %}
+           <a class="btn btn-outline-dark mb-4" href="?page={{ num }}" >{{num}}</a>
+           {% endif %}
+       {% endfor %}
+
+       {% if page_obj.has_next %}
+       <a class="btn btn-outline-dark mb-4" href="?page={{page_obj.next_page_number}}" >&raquo;</a>
+       <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages}}" >Last</a>
+       {% endif %}
+    {% endif %}
+
+    {% if file_name %}
+     {% if solutions.has_other_pages %}
+    {% if solutions.has_previous %}
+      <a class="btn btn-outline-dark mb-4" href="?page=1&file_name={{file_name}}" >First</a>
+      <a class="btn btn-outline-dark mb-4" href="?page={{ solutions.previous_page_number }}&file_name={{file_name}}">&laquo;</a>
+    {% endif %}
+
+    {% for i in solutions.paginator.page_range %}
+      {% if solutions.number == i %}
+        <a class="disabled btn btn-dark mb-4" href="?page={{ i }}&file_name={{file_name}}" >{{ i }}</a>
+        {% elif i > solutions.number|add:'-3' and  i < solutions.number|add:'3' %}
+        <a class="btn btn-outline-dark mb-4" href="?page={{ i }}&file_name={{file_name}}" >{{i}}</a>
+         {% endif %}
+       {% endfor %}
+
+    {% if solutions.has_next %}
+     <a class="btn btn-outline-dark mb-4" href="?page={{ solutions.next_page_number }}&file_name={{file_name}}">&raquo;</a>
+     <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages}}&file_name={{file_name}}" >Last</a>
+    {% endif %}
+{% endif %}
+{% endif %}
+
+{% if flag %}
+     {% if solutions.has_other_pages %}
+    {% if solutions.has_previous %}
+      <a class="btn btn-outline-dark mb-4" href="?page=1" >First</a>
+      <a class="btn btn-outline-dark mb-4" href="?page={{ solutions.previous_page_number }}">&laquo;</a>
+    {% endif %}
+
+    {% for i in solutions.paginator.page_range %}
+      {% if solutions.number == i %}
+        <a class="disabled btn btn-dark mb-4" href="?page={{ i }}" >{{ i }}</a>
+        {% elif i > solutions.number|add:'-3' and  i < solutions.number|add:'3' %}
+        <a class="btn btn-outline-dark mb-4" href="?page={{ i }}" >{{i}}</a>
+         {% endif %}
+       {% endfor %}
+
+    {% if solutions.has_next %}
+     <a class="btn btn-outline-dark mb-4" href="?page={{ solutions.next_page_number }}">&raquo;</a>
+     <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages}}" >Last</a>
+    {% endif %}
+{% endif %}
+{% endif %}
+
+        
+      </div>
+
+ </main>
+
+  
+
+
+
+  
+
+{% endblock content %}

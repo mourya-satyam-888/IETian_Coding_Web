@@ -80,6 +80,8 @@ class Solution(models.Model):
     language = models.TextField()
     date_submitted = models.DateTimeField(default=timezone.now)
     solution_file = models.FileField(upload_to='solutions/')
+    time=models.TextField(default="0")
+    verdict=models.TextField(default="wa")
 
 class Result(models.Model):
     solution = models.OneToOneField(Solution,on_delete = models.CASCADE, primary_key = True) 

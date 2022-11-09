@@ -110,6 +110,31 @@ def problems(request):
     except EmptyPage:
         problems = paginator.page(paginator.num_pages)
     return render(request, 'judge/problems.html', {'problems': problems,"faculty":False})
+
+@login_required
+def solutions(request,pid):
+    faculty=is_faculty(request)
+    if faculty and Problem.objects.get(id=pid).auth==request.user:
+
+        u=Problem.objects.get(id=pid)
+        p=u.solution_set.filter(verdict="ac").order_by("-id")
+        page = request.GET.get('page', 1)
+        paginator = Paginator(p, 10)
+        try:
+            problems = paginator.page(page)
+        except PageNotAnInteger:
+            problems = paginator.page(1)
+        except EmptyPage:
+            problems = paginator.page(paginator.num_pages)
+        return render(request, 'judge/solutions.html', {'solutions': problems, "faculty": True})
+    return render(request, 'judge/solutions.html')
+@login_required
+def sol_detail(request,pid,sid):
+    faculty=is_faculty(request)
+    if faculty and Problem.objects.get(id=pid).auth==request.user:
+        sol_file=Solution.objects.get(id=sid).solution_file.read().decode("UTF-8")
+        return render(request, 'judge/sol_detail.html', {'sol_file': sol_file})
+    return render(request, 'judge/sol_detail.html')
 class ProblemListView(ListView):
     model = Problem
     template_name = 'judge/problems.html'
@@ -197,19 +222,24 @@ def detail(request, pid):
     #     return render(request, 'judge/detail.html', context)
     # student = student_info(request)
     # today = timezone.now()
+    faculty = is_faculty(request)
     problem = Problem.objects.get(id=pid)
-    solutions = problem.solution_set.order_by('-id')
+    if faculty:
+        solutions = problem.solution_set.order_by('-id')
+    else:
+        solutions=problem.solution_set.filter(usr=request.user)
     arr = []
     counter = 0
-    # for solution in solutions:
-    #     if counter == 5:
-    #         break
-    #     if solution.result.verdict == 'ac':
-    #         arr.append(solution)
-    #         counter = counter + 1
+    for solution in solutions:
+         if counter == 5:
+             break
+         if solution.verdict == 'ac':
+             arr.append(solution)
+             counter = counter + 1
     context = {
         'problem': problem,
-        'solutions': arr
+        'solutions': arr,
+        "faculty":faculty
 
     }
     return render(request, 'judge/detail.html', context)
@@ -601,6 +631,9 @@ def viacode(request, pid):
     s = Result.objects.create(solution=a, verdict=verdict, time=rtime, message="")
     # s=r.create(solution=a,verdict='ac',time=0.002,message="")
     s.save()
+    ss = Solution.objects.get(id=sol.id)
+    ss.verdict = verdict
+    ss.save()
     # accuracy_submission(pid, verdict)
     # piechart(request.user.id, verdict)
     response_data = {}

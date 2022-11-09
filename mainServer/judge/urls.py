@@ -17,6 +17,8 @@ urlpatterns = [
     path('addproblem/save/',views.save,name='save'),
     path('detail/<int:pid>/',views.detail,name='detail'),
     path('detail/<int:pid>/submit/',views.submit,name='submit'),
+    path('detail/<int:pid>/solutions/',views.solutions,name='solutions'),
+    path('detail/<int:pid>/solutions/<int:sid>',views.sol_detail,name='sol_detail'),
     # path('detail/<int:pid>/submit/viafile/',views.viafile,name='viafile'),
     path('detail/<int:pid>/submit/viacode/',views.viacode,name='viacode')
 ]
