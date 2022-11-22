@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'froala_editor',
-
+    'home.apps.HomeConfig',
     'judge.apps.JudgeConfig',
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
@@ -136,7 +136,7 @@ MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL='profile'
+LOGIN_REDIRECT_URL='/judge/problems'
 LOGIN_URL = 'login'
 #social app custom settings
 
@@ -144,3 +144,5 @@ LOGIN_URL = 'login'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''

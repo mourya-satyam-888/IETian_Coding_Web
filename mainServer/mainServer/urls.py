@@ -37,7 +37,7 @@ from django.conf.urls.static import static
 from judge.views import user_info,UsersListView,problems
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/',user_views.register,name='register'),
+    # path('register/',user_views.register,name='register'),
     path('profile/',user_views.profile,name='profile'),
     path('users/<str:name>/',user_info,name="user-info"),
     path('users/',UsersListView.as_view(),name="users"),

@@ -16,9 +16,7 @@
   <div class="col-1" style="font-size:10px"><center>#<center></div>
   <div class="col-3" style="font-size:10px"><center>NAME</center></div>
   <div class="col-3" style="font-size:10px"><center>TAGS</center></div>
-  <div class="col-1" style="font-size:10px"><center>AUTH</center></div>
-  <div class="col-1" style="font-size:10px"><center>SUB.</center></div>
-  <div class="col-3" style="font-size:10px"><center>ACC%</center></div>
+  <div class="col-3" style="font-size:10px"><center>AUTH</center></div>
   </div>
   <hr>
 
@@ -67,12 +65,7 @@
 
 </div>
 
-  <div class="col-1"><center>{{problem.auth}}</center></div>
-  <div class="col-1"><center>{{ problem.problem_feature.total_submission }}</center></div>
-  <div class="col-3"> <p class="card-text mb-1"><div class="progress">
-   <div class="progress-bar text-light" role="progressbar" style="color:black; width: {{ problem.problem_feature.accuracy }}%;" aria-valuenow="{{ problem.problem_feature.accuracy }}" aria-valuemin="0" aria-valuemax="100">{{ problem.problem_feature.accuracy }}%</div>
-    </div></div>
-  
+  <div class="col-3"><center>{{problem.auth}}</center></div>
   </div>
   </div>
    {% endfor %}
