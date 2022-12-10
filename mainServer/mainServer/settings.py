@@ -144,5 +144,5 @@ LOGIN_URL = 'login'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '392813267216-tpd8fkhhdm7frqli33926i3fn2e3tc41.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'

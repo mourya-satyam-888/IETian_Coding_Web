@@ -1,3 +1,4 @@
+import datetime
 import json
 import os
 import random
@@ -261,12 +262,17 @@ def piechart(user_id, verdict):
 
 @login_required
 def addproblem(request):
+    if not is_faculty(request):
+        return redirect("judge")
     form = Statement(request.POST)
     return render(request, 'judge/addproblem.html', {'form': form})
 
 @login_required
 def save(request):
     usr = User.objects.get(id=request.user.id)
+    #due=datetime(request.POST["due_date"])
+    due=datetime.datetime.strptime(request.POST["due_date"], '%Y-%m-%d')+datetime.timedelta(hours=23)+datetime.timedelta(minutes=59)
+    print(due)
     p = usr.problem_set.create(title=request.POST['title'], statement=request.POST['statement'],
                                constraint=request.POST['constraint'],
                                input_format=request.POST['input_format'], output_format=request.POST['output_format'],
@@ -275,7 +281,7 @@ def save(request):
                                time_limit=request.POST['time_limit'],
                                difficulty=request.POST['difficulty'], input_file=request.FILES['input_file'],
                                output_file=request.FILES['output_file'], year=request.POST["year"], branch=request.POST["branch"],
-                               due_date=request.POST["due_date"]
+                               due_date=due
                                )
     tags = request.POST.getlist('tag[]')
     p.save()
@@ -721,7 +727,16 @@ def filter_tags(request):
 
     p_list = []
     page = request.GET.get('page', 1)
-    p = Problem.objects.order_by('-id')
+    faculty = is_faculty(request)
+    if faculty:
+        u = User.objects.get(id=request.user.id)
+        p = u.problem_set.order_by("due_date")
+    else:
+        student = student_info(request)
+        today = timezone.now()
+        p = Problem.objects.filter(year=student[0]).filter(branch=student[1]).filter(
+            due_date__gt=today)
+    #p = Problem.objects.order_by('-id')
     for problem in p:
         taglist = [x.tags for x in problem.problem_tags_set.all()]
         if all(item in taglist for item in taglst):
